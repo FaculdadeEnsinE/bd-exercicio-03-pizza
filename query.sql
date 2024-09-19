@@ -39,31 +39,31 @@ ORDER BY quantity DESC
 LIMIT 0,1;
 
 SELECT
-	MAX(quantity), -- MAX >> retornar o maior valor / máximo
-	MIN(quantity)  -- MIN >> retornar o menor valor / mínimo
+	MAX(quantity) Maximo, -- MAX >> retornar o maior valor
+	MIN(quantity) Minimo -- MIN >> retornar o menor valor
 FROM order_details od;
 
-SELECT order_id, SUM(*) quantidade
+SELECT order_id, SUM(quantity) quantidade
 FROM order_details od
 GROUP BY order_id
 ORDER BY quantidade DESC
 LIMIT 0,1;
 
-SELECT order_id,SUM(quantity)
+SELECT order_id,SUM(quantity) soma
 FROM order_details od
 WHERE order_id = 18845;
 
 --Retorne o somatório de pizzas de cada sabor vendidas
 SELECT
-	pt.nome as nomepizza,
+	pt.name as nomepizza,
 	od.quantity,
 	p.price,
-	SUM(quantity) total,
+	SUM(od.quantity) total,
 	(SUM(od.quantity) * p.price) valorTotal
 FROM order_details od
 INNER JOIN pizzas p ON od.pizza_id = p.pizza_id
 INNER JOIN pizza_types pt ON p.pizza_type_id = pt.pizza_type_id
-GROUP BY pt.nome
+GROUP BY pt.name
 ORDER BY total DESC;
 
 
@@ -81,7 +81,7 @@ SELECT COUNT(*)
 FROM orders
 WHERE date >= '2015-01-01' AND date <= '2015-01-31';
 
-SELECT COUNT(*)
+SELECT COUNT(*) quantidade
 FROM orders o
 WHERE date BETWEEN '2015-01-01' AND '2015-01-31'; -- BETWEEN  >> entre primeiro e o ultimo valor nos campos data e numeros
 
@@ -99,13 +99,13 @@ ORDER BY total DESC;
 
 
 -- Quantas pessoas pediram mais de uma pizza
-SELECT COUNT(*)
+SELECT COUNT(*) quantidadePedida
 FROM order_details od
 WHERE quantity > 1;
 
 
 -- Quantas pizzas vegetarianas foram pedidas
-SELECT COUNT(*), SUM(quantity)
+SELECT COUNT(*) quantidade, SUM(quantity) soma
 FROM order_details od
 INNER JOIN pizzas p ON od.pizza_id = p.pizza_id
 INNER JOIN pizza_types pt ON p.pizza_type_id = pt.pizza_type_id
